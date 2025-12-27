@@ -5,6 +5,7 @@ A comprehensive Document Management System (DMS) migration platform built with A
 ## 🚀 Features
 
 ### Core Functionality
+
 - **Multi-Tenant Architecture** - Isolated tenant data with claims-based context
 - **Connection Management** - Configure and manage multiple data source connections
 - **Discovery Scanner** - Automated scanning and analysis of document repositories
@@ -13,6 +14,7 @@ A comprehensive Document Management System (DMS) migration platform built with A
 - **Audit Trail** - Comprehensive logging of all system activities
 
 ### Security & Authentication
+
 - **Cookie-Based Authentication** - Secure session management
 - **Role-Based Access Control (RBAC)** - Admin, Operator, and Viewer roles
 - **Password Hashing** - Industry-standard ASP.NET Core Identity PasswordHasher
@@ -20,6 +22,7 @@ A comprehensive Document Management System (DMS) migration platform built with A
 - **Data Protection** - Encrypted sensitive data storage
 
 ### User Experience
+
 - **Modern UI** - Clean, responsive interface
 - **Toast Notifications** - Real-time user feedback
 - **Health Monitoring** - Built-in health checks for database connectivity
@@ -119,10 +122,10 @@ The application will be available at **http://localhost:5000**
 
 Development environment includes pre-seeded users:
 
-| Role        | Email              | Password     | Description           |
-|-------------|--------------------|--------------|-----------------------|
-| Admin       | admin@dms.local    | Admin@123    | Full system access    |
-| Operator    | operator@dms.local | Operator@123 | Migration operations  |
+| Role     | Email              | Password     | Description          |
+| -------- | ------------------ | ------------ | -------------------- |
+| Admin    | admin@dms.local    | Admin@123    | Full system access   |
+| Operator | operator@dms.local | Operator@123 | Migration operations |
 
 ⚠️ **Important:** Change these credentials in production environments!
 
@@ -134,6 +137,7 @@ Development environment includes pre-seeded users:
 ## 🗂️ Database Schema
 
 ### Core Tables
+
 - **Tenants** - Multi-tenant organization data
 - **Users** - System users with roles and credentials
 - **Connections** - Data source connection configurations
@@ -192,7 +196,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👥 Authors
 
-- **Your Name** - *Initial work* - [YourGitHub](https://github.com/yourusername)
+- **Your Name** - _Initial work_ - [YourGitHub](https://github.com/yourusername)
 
 ## 🙏 Acknowledgments
 
