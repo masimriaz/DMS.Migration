@@ -1,0 +1,47 @@
+<!-- Toast Host Container (already in _Layout.cshtml) -->
+<!-- This partial provides JavaScript functions to show toasts -->
+
+<script>
+    function showToast(message, type = 'info') {
+        const toastContainer = document.getElementById('toastContainer');
+        if (!toastContainer) return;
+
+        const toastId = 'toast-' + Date.now();
+        const iconClass = {
+            'success': 'bi-check-circle-fill text-success',
+            'error': 'bi-x-circle-fill text-danger',
+            'warning': 'bi-exclamation-triangle-fill text-warning',
+            'info': 'bi-info-circle-fill text-primary'
+        }[type] || 'bi-info-circle-fill text-primary';
+
+        const toastTitle = {
+            'success': 'Success',
+            'error': 'Error',
+            'warning': 'Warning',
+            'info': 'Information'
+        }[type] || 'Notification';
+
+        const toastHtml = `
+        <div class="toast" id="${toastId}" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi ${iconClass} me-2"></i>
+                <strong class="me-auto">${toastTitle}</strong>
+                <small>Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                ${message}
+            </div>
+        </div>
+    `;
+
+        toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement, { autohide: true, delay: 5000 });
+        toast.show();
+
+        toastElement.addEventListener('hidden.bs.toast', function () {
+            toastElement.remove();
+        });
+    }
+</script>

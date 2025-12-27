@@ -1,0 +1,72 @@
+@using DMS.Migration.Domain.Enums
+@model DMS.Migration.Web.Models.ConnectionViewModel
+
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-network-wired mr-2"></i>Endpoint & Options</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="endpointUrl">Endpoint URL / Path <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="endpointUrl" name="EndpointUrl"
+                            value="@Model.EndpointUrl" required
+                            placeholder="https://sharepoint.contoso.com or \\server\share">
+                    </div>
+                    <small class="form-text text-muted">Full URL for SharePoint/OneDrive or UNC path for file
+                        shares</small>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <h5 class="mt-3 mb-3"><i class="fas fa-cog mr-2"></i>Migration Options</h5>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="throttlingProfile">Throttling Profile</label>
+                    <select class="form-control" id="throttlingProfile" name="ThrottlingProfile">
+                        <option value="1" selected="@(Model.ThrottlingProfile == ThrottlingProfile.Normal)">Normal
+                            (Recommended)</option>
+                        <option value="2" selected="@(Model.ThrottlingProfile == ThrottlingProfile.Insane)">Insane
+                            (Aggressive)</option>
+                    </select>
+                    <small class="form-text text-muted">Insane mode uses maximum throughput but may trigger
+                        throttling</small>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Preservation Options</label>
+                    <div class="icheck-primary">
+                        <input type="checkbox" id="preserveAuthorship" name="PreserveAuthorship"
+                            @(Model.PreserveAuthorship ? "checked" : "")>
+                        <label for="preserveAuthorship">
+                            Preserve authorship (Created By / Modified By)
+                        </label>
+                    </div>
+                    <div class="icheck-primary">
+                        <input type="checkbox" id="preserveTimestamps" name="PreserveTimestamps"
+                            @(Model.PreserveTimestamps ? "checked" : "")>
+                        <label for="preserveTimestamps">
+                            Preserve timestamps (Created / Modified dates)
+                        </label>
+                    </div>
+                    <div class="icheck-primary">
+                        <input type="checkbox" id="replaceIllegalCharacters" name="ReplaceIllegalCharacters"
+                            @(Model.ReplaceIllegalCharacters ? "checked" : "")>
+                        <label for="replaceIllegalCharacters">
+                            Replace illegal characters in file names
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

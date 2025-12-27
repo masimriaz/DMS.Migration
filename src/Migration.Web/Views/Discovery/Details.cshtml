@@ -1,0 +1,290 @@
+@model DMS.Migration.Web.Models.DiscoveryDetailsViewModel
+@using DMS.Migration.Domain.Enums
+@{
+    ViewData["Title"] = Model.Run.Name;
+    var sizeMB = Model.SummaryMetrics.ContainsKey("total_size_bytes") 
+        ? Model.SummaryMetrics["total_size_bytes"] / (1024.0 * 1024.0) 
+        : 0;
+    var sizeGB = sizeMB / 1024.0;
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@Model.Run.Name</h1>
+                <p class="text-muted mb-0">
+                    <small>Created @Model.Run.CreatedAt.ToString("yyyy-MM-dd HH:mm") by @Model.Run.CreatedBy</small>
+                </p>
+            </div>
+            <div class="col-sm-6 text-right">
+                @if (Model.Run.Status == DiscoveryStatus.Running || Model.Run.Status == DiscoveryStatus.Queued)
+                {
+                    <form asp-action="Cancel" asp-route-id="@Model.Run.Id" method="post" style="display: inline;">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-warning" onclick="return confirm('Are you sure you want to cancel this discovery run?');">
+                            <i class="fas fa-stop mr-1"></i> Cancel
+                        </button>
+                    </form>
+                }
+                
+                @if (Model.Run.Status == DiscoveryStatus.Completed)
+                {
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                            <i class="fas fa-download mr-1"></i> Export
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="@Url.Action("Export", new { id = Model.Run.Id, format = "Json", exportType = "Summary" })">
+                                <i class="fas fa-file-code mr-2"></i> Summary (JSON)
+                            </a>
+                            <a class="dropdown-item" href="@Url.Action("Export", new { id = Model.Run.Id, format = "Csv", exportType = "DetailedInventory" })">
+                                <i class="fas fa-file-csv mr-2"></i> Detailed Inventory (CSV)
+                            </a>
+                            <a class="dropdown-item" href="@Url.Action("Export", new { id = Model.Run.Id, format = "Json", exportType = "DetailedInventory" })">
+                                <i class="fas fa-file-code mr-2"></i> Detailed Inventory (JSON)
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="@Url.Action("Export", new { id = Model.Run.Id, format = "Csv", exportType = "WarningsOnly" })">
+                                <i class="fas fa-exclamation-triangle mr-2"></i> Warnings Only (CSV)
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+
+        <!-- Status Card -->
+        <div class="card @(Model.Run.Status == DiscoveryStatus.Failed ? "card-danger" : Model.Run.Status == DiscoveryStatus.Completed ? "card-success" : "card-info")">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h5>
+                            Status: 
+                            @switch (Model.Run.Status)
+                            {
+                                case DiscoveryStatus.Queued:
+                                    <span class="badge badge-secondary badge-lg">Queued</span>
+                                    break;
+                                case DiscoveryStatus.Running:
+                                    <span class="badge badge-info badge-lg">
+                                        <i class="fas fa-spinner fa-spin"></i> Running
+                                    </span>
+                                    break;
+                                case DiscoveryStatus.Completed:
+                                    <span class="badge badge-success badge-lg">
+                                        <i class="fas fa-check-circle"></i> Completed
+                                    </span>
+                                    break;
+                                case DiscoveryStatus.Failed:
+                                    <span class="badge badge-danger badge-lg">
+                                        <i class="fas fa-times-circle"></i> Failed
+                                    </span>
+                                    break;
+                                case DiscoveryStatus.Cancelled:
+                                    <span class="badge badge-warning badge-lg">Cancelled</span>
+                                    break;
+                            }
+                        </h5>
+                        
+                        @if (!string.IsNullOrEmpty(Model.Run.CurrentStep))
+                        {
+                            <p class="mb-2"><strong>Current Step:</strong> @Model.Run.CurrentStep</p>
+                        }
+                        
+                        <div class="progress mb-2" style="height: 25px;">
+                            <div class="progress-bar @(Model.Run.Status == DiscoveryStatus.Failed ? "bg-danger" : "")" 
+                                 role="progressbar" 
+                                 style="width: @Model.Run.ProgressPercentage%" 
+                                 id="progressBar">
+                                <span style="font-weight: bold;">@Model.Run.ProgressPercentage%</span>
+                            </div>
+                        </div>
+                        
+                        @if (!string.IsNullOrEmpty(Model.Run.ErrorMessage))
+                        {
+                            <div class="alert alert-danger mt-2">
+                                <strong>Error:</strong> @Model.Run.ErrorMessage
+                            </div>
+                        }
+                    </div>
+                    
+                    <div class="col-md-4 text-right">
+                        @if (Model.Run.StartedAt.HasValue)
+                        {
+                            <p class="mb-1"><strong>Started:</strong> @Model.Run.StartedAt.Value.ToString("HH:mm:ss")</p>
+                        }
+                        @if (Model.Run.CompletedAt.HasValue)
+                        {
+                            <p class="mb-1"><strong>Completed:</strong> @Model.Run.CompletedAt.Value.ToString("HH:mm:ss")</p>
+                            var duration = Model.Run.CompletedAt.Value - (Model.Run.StartedAt ?? Model.Run.CreatedAt);
+                            <p class="mb-1"><strong>Duration:</strong> @duration.ToString(@"hh\:mm\:ss")</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Run.Status == DiscoveryStatus.Completed)
+        {
+            <!-- KPI Cards -->
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>@(Model.SummaryMetrics.ContainsKey("total_sites") ? Model.SummaryMetrics["total_sites"] : 0)</h3>
+                            <p>Sites</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <a href="@Url.Action("Items", new { id = Model.Run.Id, type = DiscoveryItemType.Site })" class="small-box-footer">
+                            View Details <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>@(Model.SummaryMetrics.ContainsKey("total_libraries") ? Model.SummaryMetrics["total_libraries"] : 0)</h3>
+                            <p>Libraries</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-folder"></i>
+                        </div>
+                        <a href="@Url.Action("Items", new { id = Model.Run.Id, type = DiscoveryItemType.Library })" class="small-box-footer">
+                            View Details <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>@(Model.SummaryMetrics.ContainsKey("total_items") ? Model.SummaryMetrics["total_items"].ToString("N0") : "0")</h3>
+                            <p>Items</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-file"></i>
+                        </div>
+                        <a href="@Url.Action("Items", new { id = Model.Run.Id })" class="small-box-footer">
+                            View All <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-primary">
+                        <div class="inner">
+                            <h3>@(sizeGB > 1 ? $"{sizeGB:F2} GB" : $"{sizeMB:F2} MB")</h3>
+                            <p>Total Size</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">
+                            &nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Warnings Card -->
+            @if (Model.TotalWarnings > 0)
+            {
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>Warnings & Issues
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>@Model.TotalWarnings <small>Total Warnings</small></h4>
+                                @if (Model.CriticalWarnings > 0)
+                                {
+                                    <p class="text-danger">
+                                        <strong>@Model.CriticalWarnings</strong> critical issues that may block migration
+                                    </p>
+                                }
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a href="@Url.Action("Warnings", new { id = Model.Run.Id })" class="btn btn-warning">
+                                    <i class="fas fa-list mr-1"></i> View All Warnings
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Additional Metrics -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-chart-bar mr-2"></i>Detailed Metrics
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6>Content</h6>
+                            <ul class="list-unstyled">
+                                <li><strong>Lists:</strong> @(Model.SummaryMetrics.ContainsKey("total_lists") ? Model.SummaryMetrics["total_lists"] : 0)</li>
+                                <li><strong>Libraries:</strong> @(Model.SummaryMetrics.ContainsKey("total_libraries") ? Model.SummaryMetrics["total_libraries"] : 0)</li>
+                                <li><strong>Items:</strong> @(Model.SummaryMetrics.ContainsKey("total_items") ? Model.SummaryMetrics["total_items"].ToString("N0") : "0")</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>Features</h6>
+                            <ul class="list-unstyled">
+                                <li><strong>Versioning Enabled:</strong> @(Model.SummaryMetrics.ContainsKey("libraries_with_versioning") ? Model.SummaryMetrics["libraries_with_versioning"] : 0) libraries</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>Scope</h6>
+                            <ul class="list-unstyled">
+                                <li><strong>URL:</strong> @Model.Run.ScopeUrl</li>
+                                <li><strong>Connection:</strong> @Model.Run.SourceConnection.Name</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            var runId = '@Model.Run.Id';
+            var isRunning = @((Model.Run.Status == DiscoveryStatus.Running || Model.Run.Status == DiscoveryStatus.Queued) ? "true" : "false");
+            
+            if (isRunning) {
+                // Poll for status updates
+                var pollInterval = setInterval(function() {
+                    $.getJSON('/Discovery/' + runId + '/Status', function(data) {
+                        // Update progress bar
+                        $('#progressBar').css('width', data.progressPercentage + '%');
+                        $('#progressBar span').text(data.progressPercentage + '%');
+                        
+                        // Check if complete
+                        if (data.isComplete) {
+                            clearInterval(pollInterval);
+                            location.reload(); // Reload to show final results
+                        }
+                    });
+                }, 5000); // Poll every 5 seconds
+            }
+        });
+    </script>
+}

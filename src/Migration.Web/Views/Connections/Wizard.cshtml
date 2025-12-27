@@ -1,0 +1,86 @@
+@model DMS.Migration.Web.Models.ConnectionViewModel
+@{
+    ViewData["Title"] = Model.IsEditMode ? $"Edit Connection - {Model.Name}" : "New Connection";
+    ViewData["PageTitle"] = Model.IsEditMode ? "Edit Connection" : "New Connection";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@ViewData["PageTitle"]</h1>
+                <p class="text-muted">Configure your source or target connection</p>
+            </div>
+            <div class="col-sm-6">
+                <div class="float-sm-right">
+                    <a href="@Url.Action("Index")" class="btn btn-default">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        @await Html.PartialAsync("_WizardStepper", Model)
+
+        <form id="connectionForm" asp-action="Save" method="post">
+            <input type="hidden" id="connectionId" name="Id" value="@Model.Id" />
+            <input type="hidden" id="tenantId" name="TenantId" value="@Model.TenantId" />
+            <input type="hidden" id="currentStep" name="CurrentStep" value="@Model.CurrentStep" />
+            <input type="hidden" id="isEditMode" name="IsEditMode" value="@Model.IsEditMode" />
+
+            <div class="wizard-step" data-step="1">
+                @await Html.PartialAsync("_StepBasics", Model)
+            </div>
+
+            <div class="wizard-step" data-step="2" style="display:none;">
+                @await Html.PartialAsync("_StepAuthentication", Model)
+            </div>
+
+            <div class="wizard-step" data-step="3" style="display:none;">
+                @await Html.PartialAsync("_StepEndpoint", Model)
+            </div>
+
+            <div class="wizard-step" data-step="4" style="display:none;">
+                @await Html.PartialAsync("_StepVerification", Model)
+            </div>
+
+            <div class="wizard-step" data-step="5" style="display:none;">
+                @await Html.PartialAsync("_StepReview", Model)
+            </div>
+
+            <!-- Wizard Navigation Footer -->
+            <div class="card card-outline card-primary mt-3">
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-6">
+                            <button type="button" id="btnPrevious" class="btn btn-default" disabled>
+                                <i class="fas fa-arrow-left mr-2"></i>Previous
+                            </button>
+                        </div>
+                        <div class="col-6 text-right">
+                            <button type="button" id="btnSaveDraft" class="btn btn-outline-primary mr-2">
+                                <i class="fas fa-save mr-2"></i>Save Draft
+                            </button>
+                            <button type="button" id="btnNext" class="btn btn-primary">
+                                Next<i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                            <button type="button" id="btnFinish" class="btn btn-success" style="display:none;">
+                                <i class="fas fa-check-circle mr-2"></i>Finish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/connections-wizard.js"></script>
+}

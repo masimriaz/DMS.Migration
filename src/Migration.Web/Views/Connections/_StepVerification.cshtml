@@ -1,0 +1,36 @@
+@model DMS.Migration.Web.Models.ConnectionViewModel
+
+<div class="card card-success">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-check-circle mr-2"></i>Test Connection</h3>
+    </div>
+    <div class="card-body">
+        <div class="callout callout-info">
+            <h5><i class="fas fa-info-circle mr-2"></i>Recommended</h5>
+            <p class="mb-0">Test your connection to verify credentials and permissions before saving.</p>
+        </div>
+
+        <div class="text-center py-4">
+            <button type="button" id="btnTestConnection" class="btn btn-lg btn-primary">
+                <i class="fas fa-shield-alt mr-2"></i>Run Connection Test
+            </button>
+        </div>
+
+        <div id="verificationResult" style="display:none;">
+            <hr>
+            <h5 class="mb-3"><i class="fas fa-clipboard-check mr-2"></i>Verification Results</h5>
+            <div id="verificationStatus"></div>
+            <div id="verificationDiagnostics" class="mt-3"></div>
+        </div>
+
+        <div id="verificationProgress" style="display:none;">
+            <hr>
+            <div class="overlay dark">
+                <i class="fas fa-3x fa-sync-alt fa-spin"></i>
+            </div>
+            <div class="text-center py-4">
+                <h5 class="text-muted">Testing connection, please wait...</h5>
+            </div>
+        </div>
+    </div>
+</div>

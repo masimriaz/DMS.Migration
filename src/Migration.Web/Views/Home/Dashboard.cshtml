@@ -1,0 +1,466 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["Subtitle"] = "Real-time migration insights and performance analytics";
+}
+
+<!-- Info boxes -->
+<div class="row">
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-tasks"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Active Jobs</span>
+                <span class="info-box-number">
+                    12
+                    <small class="text-success"><i class="fas fa-arrow-up"></i> +3</small>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-check-circle"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Items Migrated</span>
+                <span class="info-box-number">2.4M</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix hidden-md-up"></div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-tachometer-alt"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Throughput</span>
+                <span class="info-box-number">1.2K/s</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-exclamation-triangle"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Active Issues</span>
+                <span class="info-box-number">23</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main row -->
+<div class="row">
+    <!-- Left col -->
+    <section class="col-lg-7 connectedSortable">
+        <!-- Migration Progress Card -->
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                    <h3 class="card-title">Migration Progress</h3>
+                    <a href="/Jobs">View All</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex">
+                    <p class="d-flex flex-column">
+                        <span class="text-bold text-lg">2,450,389</span>
+                        <span>Total Items Migrated</span>
+                    </p>
+                    <p class="ml-auto d-flex flex-column text-right">
+                        <span class="text-success">
+                            <i class="fas fa-arrow-up"></i> 12.5%
+                        </span>
+                        <span class="text-muted">Since last week</span>
+                    </p>
+                </div>
+
+                <div class="position-relative mb-4">
+                    <canvas id="migration-chart" height="200"></canvas>
+                </div>
+
+                <div class="d-flex flex-row justify-content-end">
+                    <span class="mr-2">
+                        <i class="fas fa-square text-primary"></i> This Week
+                    </span>
+                    <span>
+                        <i class="fas fa-square text-gray"></i> Last Week
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Migration Jobs -->
+        <div class="card">
+            <div class="card-header border-transparent">
+                <h3 class="card-title">Current Migration Jobs</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table m-0">
+                        <thead>
+                            <tr>
+                                <th>Job Name</th>
+                                <th>Status</th>
+                                <th>Progress</th>
+                                <th>Items</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="/Jobs/1">Document Library Migration</a></td>
+                                <td><span class="badge badge-success">Running</span></td>
+                                <td>
+                                    <div class="progress progress-xs">
+                                        <div class="progress-bar progress-bar-success" style="width: 75%"></div>
+                                    </div>
+                                    <small>75%</small>
+                                </td>
+                                <td>45,823 / 61,097</td>
+                            </tr>
+                            <tr>
+                                <td><a href="/Jobs/2">User Permissions Sync</a></td>
+                                <td><span class="badge badge-info">In Progress</span></td>
+                                <td>
+                                    <div class="progress progress-xs">
+                                        <div class="progress-bar bg-info" style="width: 42%"></div>
+                                    </div>
+                                    <small>42%</small>
+                                </td>
+                                <td>8,956 / 21,340</td>
+                            </tr>
+                            <tr>
+                                <td><a href="/Jobs/3">Site Collection Copy</a></td>
+                                <td><span class="badge badge-warning">Queued</span></td>
+                                <td>
+                                    <div class="progress progress-xs progress-striped active">
+                                        <div class="progress-bar bg-warning" style="width: 15%"></div>
+                                    </div>
+                                    <small>15%</small>
+                                </td>
+                                <td>3,245 / 21,633</td>
+                            </tr>
+                            <tr>
+                                <td><a href="/Jobs/4">Metadata Transformation</a></td>
+                                <td><span class="badge badge-success">Running</span></td>
+                                <td>
+                                    <div class="progress progress-xs">
+                                        <div class="progress-bar bg-success" style="width: 88%"></div>
+                                    </div>
+                                    <small>88%</small>
+                                </td>
+                                <td>143,789 / 163,396</td>
+                            </tr>
+                            <tr>
+                                <td><a href="/Jobs/5">List Data Migration</a></td>
+                                <td><span class="badge badge-danger">Paused</span></td>
+                                <td>
+                                    <div class="progress progress-xs">
+                                        <div class="progress-bar bg-danger" style="width: 35%"></div>
+                                    </div>
+                                    <small>35%</small>
+                                </td>
+                                <td>12,456 / 35,589</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <a href="/Jobs/Create" class="btn btn-sm btn-info float-left">Start New Job</a>
+                <a href="/Jobs" class="btn btn-sm btn-secondary float-right">View All Jobs</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Right col -->
+    <section class="col-lg-5 connectedSortable">
+        <!-- System Health -->
+        <div class="card bg-gradient-primary">
+            <div class="card-header border-0">
+                <h3 class="card-title">
+                    <i class="fas fa-heartbeat mr-1"></i>
+                    System Health
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                    <p class="text-white font-weight-bold">System Status</p>
+                    <p class="d-flex flex-column text-right">
+                        <span class="font-weight-bold text-white">
+                            <i class="fas fa-check-circle mr-1"></i> Operational
+                        </span>
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                    <p class="text-white">Success Rate</p>
+                    <p class="d-flex flex-column text-right">
+                        <span class="font-weight-bold text-white">99.97%</span>
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                    <p class="text-white">Active Issues</p>
+                    <p class="d-flex flex-column text-right">
+                        <span class="font-weight-bold text-white">23</span>
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-0">
+                    <p class="text-white">Data Transferred</p>
+                    <p class="d-flex flex-column text-right">
+                        <span class="font-weight-bold text-white">145 TB</span>
+                    </p>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent">
+                <div class="row">
+                    <div class="col-4 text-center">
+                        <div class="text-white">CPU</div>
+                        <div><strong>45%</strong></div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="text-white">Memory</div>
+                        <div><strong>62%</strong></div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="text-white">Storage</div>
+                        <div><strong>78%</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-bolt mr-1"></i>
+                    Quick Actions
+                </h3>
+            </div>
+            <div class="card-body">
+                <a href="/Connections/Create" class="btn btn-app">
+                    <i class="fas fa-plug"></i> New Connection
+                </a>
+                <a href="/Discovery/Start" class="btn btn-app">
+                    <i class="fas fa-search"></i> Run Discovery
+                </a>
+                <a href="/Plans/Create" class="btn btn-app">
+                    <i class="fas fa-sitemap"></i> Create Plan
+                </a>
+                <a href="/Jobs/Create" class="btn btn-app bg-success">
+                    <i class="fas fa-play"></i> Start Migration
+                </a>
+                <a href="/Reports" class="btn btn-app">
+                    <i class="fas fa-chart-bar"></i> View Reports
+                </a>
+                <a href="/Validation" class="btn btn-app">
+                    <i class="fas fa-check-double"></i> Validation
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-history mr-1"></i>
+                    Recent Activity
+                </h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <ul class="products-list product-list-in-card pl-2 pr-2">
+                    <li class="item">
+                        <div class="product-img">
+                            <i class="fas fa-check-circle text-success fa-2x"></i>
+                        </div>
+                        <div class="product-info">
+                            <a href="#" class="product-title">Migration job completed
+                                <span class="badge badge-success float-right">Complete</span>
+                            </a>
+                            <span class="product-description">
+                                Document Library Migration finished successfully
+                            </span>
+                            <small class="text-muted">3 minutes ago</small>
+                        </div>
+                    </li>
+                    <li class="item">
+                        <div class="product-img">
+                            <i class="fas fa-exclamation-triangle text-warning fa-2x"></i>
+                        </div>
+                        <div class="product-info">
+                            <a href="#" class="product-title">2 items failed validation
+                                <span class="badge badge-warning float-right">Warning</span>
+                            </a>
+                            <span class="product-description">
+                                Metadata transformation validation issues
+                            </span>
+                            <small class="text-muted">15 minutes ago</small>
+                        </div>
+                    </li>
+                    <li class="item">
+                        <div class="product-img">
+                            <i class="fas fa-play-circle text-info fa-2x"></i>
+                        </div>
+                        <div class="product-info">
+                            <a href="#" class="product-title">New job started
+                                <span class="badge badge-info float-right">Running</span>
+                            </a>
+                            <span class="product-description">
+                                User Permissions Sync job initiated
+                            </span>
+                            <small class="text-muted">1 hour ago</small>
+                        </div>
+                    </li>
+                    <li class="item">
+                        <div class="product-img">
+                            <i class="fas fa-plug text-primary fa-2x"></i>
+                        </div>
+                        <div class="product-info">
+                            <a href="#" class="product-title">Connection created
+                                <span class="badge badge-primary float-right">New</span>
+                            </a>
+                            <span class="product-description">
+                                SharePoint Online production connection
+                            </span>
+                            <small class="text-muted">2 hours ago</small>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-footer text-center">
+                <a href="/Activity" class="uppercase">View All Activity</a>
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="card bg-gradient-success">
+            <div class="card-header border-0">
+                <h3 class="card-title">
+                    <i class="far fa-calendar-alt"></i>
+                    Performance This Month
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="d-flex">
+                    <p class="d-flex flex-column">
+                        <span class="text-bold text-white text-lg">485,342</span>
+                        <span class="text-white">Items Migrated</span>
+                    </p>
+                    <p class="ml-auto d-flex flex-column text-right">
+                        <span class="text-white">
+                            <i class="fas fa-arrow-up"></i> 18.2%
+                        </span>
+                        <span class="text-white">vs last month</span>
+                    </p>
+                </div>
+
+                <div class="d-flex flex-row justify-content-between border-top pt-3">
+                    <div class="text-center">
+                        <p class="text-white mb-1">Jobs</p>
+                        <h5 class="text-white font-weight-bold mb-0">87</h5>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-white mb-1">Success Rate</p>
+                        <h5 class="text-white font-weight-bold mb-0">99.5%</h5>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-white mb-1">Avg Time</p>
+                        <h5 class="text-white font-weight-bold mb-0">2.3h</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <!-- ChartJS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+    <script>
+        $(function () {
+            'use strict'
+
+            var ticksStyle = {
+                fontColor: '#495057',
+                fontStyle: 'bold'
+            }
+
+            var mode = 'index'
+            var intersect = true
+
+            var $migrationChart = $('#migration-chart')
+            var migrationChart = new Chart($migrationChart, {
+                type: 'bar',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [
+                        {
+                            backgroundColor: '#007bff',
+                            borderColor: '#007bff',
+                            data: [45000, 52000, 48000, 62000, 58000, 42000, 38000]
+                        },
+                        {
+                            backgroundColor: '#ced4da',
+                            borderColor: '#ced4da',
+                            data: [38000, 42000, 45000, 48000, 52000, 35000, 32000]
+                        }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        mode: mode,
+                        intersect: intersect
+                    },
+                    hover: {
+                        mode: mode,
+                        intersect: intersect
+                    },
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        yAxes: [{
+                            gridLines: {
+                                display: true,
+                                lineWidth: '4px',
+                                color: 'rgba(0, 0, 0, .2)',
+                                zeroLineColor: 'transparent'
+                            },
+                            ticks: $.extend({
+                                beginAtZero: true,
+                                callback: function (value) {
+                                    if (value >= 1000) {
+                                        value /= 1000
+                                        value += 'k'
+                                    }
+                                    return value
+                                }
+                            }, ticksStyle)
+                        }],
+                        xAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: ticksStyle
+                        }]
+                    }
+                }
+            })
+        })
+    </script>
+}

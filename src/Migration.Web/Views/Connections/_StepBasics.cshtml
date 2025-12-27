@@ -1,0 +1,127 @@
+@using DMS.Migration.Domain.Enums
+@model DMS.Migration.Web.Models.ConnectionViewModel
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-info-circle mr-2"></i>Basic Information</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label for="name">Connection Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="name" name="Name" value="@Model.Name" required
+                        placeholder="e.g., Production SharePoint Site">
+                    <small class="form-text text-muted">A descriptive name to identify this connection</small>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="role">Role <span class="text-danger">*</span></label>
+                    <select class="form-control" id="role" name="Role" required>
+                        <option value="">Select Role</option>
+                        <option value="1" selected="@(Model.Role == ConnectionRole.Source)">Source</option>
+                        <option value="2" selected="@(Model.Role == ConnectionRole.Target)">Target</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Connection Type <span class="text-danger">*</span></label>
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            <div class="connection-type-option">
+                                <input type="radio" name="Type" id="typeOnPrem" value="1" @(Model.Type ==
+                                                                                                                              ConnectionType.SharePointOnPrem ? "checked" : "")>
+                                <label for="typeOnPrem" class="connection-type-label">
+                                    <div class="text-center p-3 border rounded">
+                                        <i class="fas fa-building mb-2" style="font-size: 2.5rem; color: #007bff;"></i>
+                                        <div class="font-weight-bold">SharePoint</div>
+                                        <div class="small text-muted">On-Premises</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="connection-type-option">
+                                <input type="radio" name="Type" id="typeSPO" value="2" @(Model.Type ==
+                                                                                                                           ConnectionType.SharePointOnline ? "checked" : "")>
+                                <label for="typeSPO" class="connection-type-label">
+                                    <div class="text-center p-3 border rounded">
+                                        <i class="fas fa-cloud mb-2" style="font-size: 2.5rem; color: #007bff;"></i>
+                                        <div class="font-weight-bold">SharePoint</div>
+                                        <div class="small text-muted">Online</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="connection-type-option">
+                                <input type="radio" name="Type" id="typeOneDrive" value="3" @(Model.Type ==
+                                                                                                                                ConnectionType.OneDriveForBusiness ? "checked" : "")>
+                                <label for="typeOneDrive" class="connection-type-label">
+                                    <div class="text-center p-3 border rounded">
+                                        <i class="fas fa-cloud-upload-alt mb-2"
+                                            style="font-size: 2.5rem; color: #007bff;"></i>
+                                        <div class="font-weight-bold">OneDrive</div>
+                                        <div class="small text-muted">for Business</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="connection-type-option">
+                                <input type="radio" name="Type" id="typeFileShare" value="4" @(Model.Type ==
+                                                                                                                                 ConnectionType.FileShare ? "checked" : "")>
+                                <label for="typeFileShare" class="connection-type-label">
+                                    <div class="text-center p-3 border rounded">
+                                        <i class="fas fa-folder mb-2" style="font-size: 2.5rem; color: #007bff;"></i>
+                                        <div class="font-weight-bold">File Share</div>
+                                        <div class="small text-muted">Network Path</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="Description" rows="3"
+                        placeholder="Optional description of this connection">@Model.Description</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .connection-type-option input[type="radio"] {
+        display: none;
+    }
+
+    .connection-type-label {
+        cursor: pointer;
+        display: block;
+        margin: 0;
+    }
+
+    .connection-type-label .border {
+        transition: all 0.3s ease;
+    }
+
+    .connection-type-label:hover .border {
+        border-color: #007bff !important;
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+    }
+
+    .connection-type-option input[type="radio"]:checked+label .border {
+        border-color: #007bff !important;
+        background-color: #e7f3ff;
+        border-width: 2px;
+    }
+</style>

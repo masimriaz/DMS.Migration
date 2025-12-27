@@ -1,0 +1,87 @@
+@model DMS.Migration.Web.Models.ConnectionViewModel
+
+<div class="card card-warning">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-lock mr-2"></i>Authentication</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="authMode">Authentication Mode <span class="text-danger">*</span></label>
+                    <select class="form-control" id="authMode" name="AuthenticationMode" required>
+                        <option value="">Select Authentication</option>
+                        <option value="ServiceAccount" selected="@(Model.AuthenticationMode == "ServiceAccount")">
+                            Service Account</option>
+                        <option value="AppOnly" selected="@(Model.AuthenticationMode == "AppOnly")">App-Only (Client
+                            Credentials)</option>
+                        <option value="OAuth" selected="@(Model.AuthenticationMode == "OAuth")">OAuth 2.0</option>
+                        <option value="Anonymous" selected="@(Model.AuthenticationMode == "Anonymous")">Anonymous
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-12" id="credentialsPanel" style="display:none;">
+                <div class="callout callout-info">
+                    <h5><i class="fas fa-shield-alt mr-2"></i>Security Notice</h5>
+                    <p class="mb-0">Credentials are encrypted at rest using industry-standard AES-256 encryption.</p>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="username">Username / Client ID</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="username" name="Username"
+                                    value="@Model.Username" placeholder="domain\username or app-id">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="password">Password / Client Secret</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                </div>
+                                <input type="password" class="form-control" id="password" name="Password"
+                                    placeholder="@(Model.IsEditMode ? "Leave blank to keep existing" : "Enter password")">
+                            </div>
+                            <div class="icheck-primary mt-2">
+                                <input type="checkbox" id="showPassword">
+                                <label for="showPassword">
+                                    Show password
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const authMode = document.getElementById('authMode');
+        const credentialsPanel = document.getElementById('credentialsPanel');
+        const showPasswordCheckbox = document.getElementById('showPassword');
+        const passwordField = document.getElementById('password');
+
+        function updateCredentialsVisibility() {
+            const mode = authMode.value;
+            credentialsPanel.style.display = (mode === 'ServiceAccount' || mode === 'AppOnly') ? 'block' : 'none';
+        }
+
+        authMode.addEventListener('change', updateCredentialsVisibility);
+        updateCredentialsVisibility();
+
+        showPasswordCheckbox.addEventListener('change', function () {
+            passwordField.type = this.checked ? 'text' : 'password';
+        });
+    });
+</script>

@@ -1,0 +1,22 @@
+@model dynamic
+
+@{
+    var tableId = Model?.TableId ?? "dataTable";
+    var columns = Model?.Columns ?? new List<string> { "Column 1", "Column 2", "Actions" };
+}
+
+<div class="table-responsive">
+    <table class="table data-table" id="@tableId">
+        <thead>
+            <tr>
+                @foreach (var column in columns)
+                {
+                    <th>@column</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @RenderBody()
+        </tbody>
+    </table>
+</div>

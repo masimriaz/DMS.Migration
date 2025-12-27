@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Access Denied";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Data Migration Platform</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="hold-transition"
+    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div class="error-page" style="width: 500px;">
+        <div class="card">
+            <div class="card-body text-center p-5">
+                <div class="error-content" style="margin-left: 0;">
+                    <h1 class="text-warning" style="font-size: 80px;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </h1>
+                    <h3>
+                        <i class="fas fa-ban text-danger"></i> Access Denied
+                    </h3>
+                    <p class="mb-4">
+                        You do not have permission to access this resource.
+                    </p>
+                    <div class="input-group mb-3">
+                        <a href="/Home/Dashboard" class="btn btn-primary mr-2">
+                            <i class="fas fa-home"></i> Go to Dashboard
+                        </a>
+                        <a href="/Account/Logout" class="btn btn-secondary">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

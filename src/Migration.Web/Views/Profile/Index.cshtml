@@ -1,0 +1,337 @@
+@model DMS.Migration.Web.ViewModels.ProfileViewModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">
+                    <i class="fas fa-user-circle mr-2"></i>My Profile
+                </h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active">Profile</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Profile Information Card -->
+            <div class="col-md-4">
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <div class="profile-user-img-wrapper mb-3">
+                                <div class="profile-user-img img-fluid img-circle"
+                                    style="width: 100px; height: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                            display: flex; align-items: center; justify-content: center; margin: 0 auto; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                                    <span style="font-size: 48px; color: white; font-weight: 600;">
+                                        @(Model.FullName.Split(' ').Length > 1
+                                                                                ? string.Concat(Model.FullName.Split(' ')[0][0], Model.FullName.Split(' ')[1][0])
+                                                                                : Model.FullName.Substring(0, Math.Min(2, Model.FullName.Length)))
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 class="profile-username text-center">@Model.FullName</h3>
+
+                        <p class="text-muted text-center mb-1">
+                            <i class="fas fa-envelope mr-2"></i>@Model.Email
+                        </p>
+
+                        @if (!string.IsNullOrEmpty(Model.Role))
+                        {
+                            <p class="text-center mb-3">
+                                <span class="badge badge-primary badge-pill" style="font-size: 14px; padding: 6px 16px;">
+                                    <i class="fas fa-shield-alt mr-1"></i>@Model.Role
+                                </span>
+                            </p>
+                        }
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b><i class="fas fa-user mr-2 text-primary"></i>Username</b>
+                                <span class="float-right">@Model.Username</span>
+                            </li>
+                            @if (!string.IsNullOrEmpty(Model.TenantName))
+                            {
+                                <li class="list-group-item">
+                                    <b><i class="fas fa-building mr-2 text-info"></i>Tenant</b>
+                                    <span class="float-right">@Model.TenantName</span>
+                                </li>
+                            }
+                            <li class="list-group-item">
+                                <b><i class="fas fa-calendar-alt mr-2 text-success"></i>Member Since</b>
+                                <span class="float-right">@Model.CreatedAt.ToString("MMM dd, yyyy")</span>
+                            </li>
+                            @if (Model.LastLoginAt.HasValue)
+                            {
+                                <li class="list-group-item">
+                                    <b><i class="fas fa-sign-in-alt mr-2 text-warning"></i>Last Login</b>
+                                    <span class="float-right"
+                                        title="@Model.LastLoginAt.Value.ToString("yyyy-MM-dd HH:mm:ss")">
+                                        @GetRelativeTime(Model.LastLoginAt.Value)
+                                    </span>
+                                </li>
+                            }
+                            <li class="list-group-item">
+                                <b><i
+                                        class="fas fa-toggle-on mr-2 @(Model.IsActive ? "text-success" : "text-danger")"></i>Status</b>
+                                <span class="float-right">
+                                    @if (Model.IsActive)
+                                    {
+                                        <span class="badge badge-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-danger">Inactive</span>
+                                    }
+                                </span>
+                            </li>
+                        </ul>
+
+                        <a href="#" class="btn btn-primary btn-block"
+                            onclick="alert('Change password functionality coming soon!'); return false;">
+                            <i class="fas fa-key mr-2"></i><b>Change Password</b>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Roles Card -->
+                @if (Model.Roles.Any())
+                {
+                    <div class="card card-success card-outline">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-user-tag mr-2"></i>Assigned Roles
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            @foreach (var role in Model.Roles)
+                            {
+                                <span class="badge badge-success mr-2 mb-2" style="font-size: 14px; padding: 8px 12px;">
+                                    <i class="fas fa-check-circle mr-1"></i>@role
+                                </span>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Account Activity & Security -->
+            <div class="col-md-8">
+                <!-- Account Information -->
+                <div class="card card-outline card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-info-circle mr-2"></i>Account Information
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><i class="fas fa-id-card mr-2"></i>User ID</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" value="@Model.Id" readonly>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                onclick="copyToClipboard('@Model.Id')" title="Copy to clipboard">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><i class="fas fa-user mr-2"></i>Username</label>
+                                    <input type="text" class="form-control" value="@Model.Username" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><i class="fas fa-signature mr-2"></i>Full Name</label>
+                                    <input type="text" class="form-control" value="@Model.FullName" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><i class="fas fa-envelope mr-2"></i>Email Address</label>
+                                    <input type="email" class="form-control" value="@Model.Email" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            <strong>Note:</strong> To update your profile information, please contact your system
+                            administrator.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Information -->
+                <div class="card card-outline card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-shield-alt mr-2"></i>Security & Activity
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-info"><i class="fas fa-calendar-check"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Account Created</span>
+                                        <span class="info-box-number">@Model.CreatedAt.ToString("MMM dd, yyyy")</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-success"><i class="fas fa-sign-in-alt"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Last Login</span>
+                                        <span class="info-box-number" style="font-size: 14px;">
+                                            @if (Model.LastLoginAt.HasValue)
+                                            {
+                                                @GetRelativeTime(Model.LastLoginAt.Value)
+                                            }
+                                            else
+                                            {
+                                                <text>Never</text>
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-box">
+                                    <span
+                                        class="info-box-icon @(Model.FailedLoginAttempts > 0 ? "bg-warning" : "bg-success")">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Failed Attempts</span>
+                                        <span class="info-box-number">@Model.FailedLoginAttempts</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <h5 class="mb-3"><i class="fas fa-lock mr-2"></i>Security Recommendations</h5>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success mr-2"></i>
+                                        Use a strong, unique password
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success mr-2"></i>
+                                        Change your password regularly (every 90 days)
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success mr-2"></i>
+                                        Never share your credentials with others
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success mr-2"></i>
+                                        Log out when using shared computers
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card card-outline card-secondary">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-bolt mr-2"></i>Quick Actions
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a href="#" class="btn btn-outline-primary btn-block"
+                                    onclick="alert('Change password functionality coming soon!'); return false;">
+                                    <i class="fas fa-key mr-2"></i>Change Password
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/" class="btn btn-outline-info btn-block">
+                                    <i class="fas fa-home mr-2"></i>Back to Dashboard
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline w-100">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-outline-danger btn-block">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function () {
+                // Show success message
+                toastr.success('User ID copied to clipboard!', 'Copied', {
+                    closeButton: true,
+                    progressBar: true,
+                    positionClass: 'toast-top-right',
+                    timeOut: 2000
+                });
+            }).catch(function (err) {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy to clipboard');
+            });
+        }
+    </script>
+}
+
+@functions {
+    string GetRelativeTime(DateTime dateTime)
+    {
+        var timeSpan = DateTime.UtcNow - dateTime.ToUniversalTime();
+
+        if (timeSpan.TotalMinutes < 1)
+            return "Just now";
+        if (timeSpan.TotalMinutes < 60)
+            return $"{(int)timeSpan.TotalMinutes} minute{((int)timeSpan.TotalMinutes != 1 ? "s" : "")} ago";
+        if (timeSpan.TotalHours < 24)
+            return $"{(int)timeSpan.TotalHours} hour{((int)timeSpan.TotalHours != 1 ? "s" : "")} ago";
+        if (timeSpan.TotalDays < 30)
+            return $"{(int)timeSpan.TotalDays} day{((int)timeSpan.TotalDays != 1 ? "s" : "")} ago";
+        if (timeSpan.TotalDays < 365)
+            return $"{(int)(timeSpan.TotalDays / 30)} month{((int)(timeSpan.TotalDays / 30) != 1 ? "s" : "")} ago";
+
+        return $"{(int)(timeSpan.TotalDays / 365)} year{((int)(timeSpan.TotalDays / 365) != 1 ? "s" : "")} ago";
+    }
+}

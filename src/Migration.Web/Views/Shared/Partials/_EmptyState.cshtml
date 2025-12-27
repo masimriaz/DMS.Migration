@@ -1,0 +1,23 @@
+@model dynamic
+
+@{
+    var icon = Model?.Icon ?? "bi-inbox";
+    var title = Model?.Title ?? "No items found";
+    var message = Model?.Message ?? "There are no items to display.";
+    var actionText = Model?.ActionText ?? "";
+    var actionUrl = Model?.ActionUrl ?? "";
+}
+
+<div class="empty-state">
+    <div class="empty-state-icon">
+        <i class="bi @icon"></i>
+    </div>
+    <h3 class="empty-state-title">@title</h3>
+    <p class="empty-state-message">@message</p>
+    @if (!string.IsNullOrEmpty(actionText) && !string.IsNullOrEmpty(actionUrl))
+    {
+        <a href="@actionUrl" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> @actionText
+        </a>
+    }
+</div>

@@ -1,0 +1,23 @@
+@model dynamic
+
+@{
+    var percentage = Model?.Percentage ?? 0;
+    var label = Model?.Label ?? "Processing";
+    var eta = Model?.Eta ?? "";
+}
+
+<div class="progress-with-eta">
+    <div class="progress-label">
+        <span class="text-muted">@label</span>
+        @if (!string.IsNullOrEmpty(eta))
+        {
+            <span class="text-muted"><i class="bi bi-clock"></i> ETA: @eta</span>
+        }
+    </div>
+    <div class="progress">
+        <div class="progress-bar @(percentage >= 100 ? "bg-success" : "bg-primary")" role="progressbar"
+            style="width: @percentage%" aria-valuenow="@percentage" aria-valuemin="0" aria-valuemax="100">
+            @percentage%
+        </div>
+    </div>
+</div>

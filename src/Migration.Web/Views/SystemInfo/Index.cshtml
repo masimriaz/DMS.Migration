@@ -1,0 +1,350 @@
+@model SystemInfoViewModel
+@{
+    ViewData["Title"] = "System Information";
+}
+
+<!-- Content Header -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0"><i class="fas fa-server mr-2"></i>System Information</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                    <li class="breadcrumb-item active">System Info</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <!-- Application Info Row -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@Model.Version</h3>
+                        <p>Application Version</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@Model.Uptime.Days<small>d</small> @Model.Uptime.Hours<small>h</small></h3>
+                        <p>Uptime</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@Model.Environment</h3>
+                        <p>Environment</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-6">
+                <div class="small-box @(Model.IsRunningInDocker ? "bg-primary" : "bg-secondary")">
+                    <div class="inner">
+                        <h3>@(Model.IsRunningInDocker ? "Docker" : "Native")</h3>
+                        <p>Deployment Mode</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fab fa-docker"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Application Details -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-laptop-code mr-2"></i>Application Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 40%">Name:</th>
+                                    <td>@Model.ApplicationName</td>
+                                </tr>
+                                <tr>
+                                    <th>Version:</th>
+                                    <td><span class="badge badge-info">@Model.Version</span></td>
+                                </tr>
+                                <tr>
+                                    <th>Environment:</th>
+                                    <td><span
+                                            class="badge badge-@(Model.Environment == "Production" ? "success" : "warning")">@Model.Environment</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Started:</th>
+                                    <td>@Model.StartTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                </tr>
+                                <tr>
+                                    <th>Uptime:</th>
+                                    <td>@Model.Uptime.Days days, @Model.Uptime.Hours hours, @Model.Uptime.Minutes
+                                        minutes</td>
+                                </tr>
+                                <tr>
+                                    <th>Content Root:</th>
+                                    <td><small>@Model.ContentRoot</small></td>
+                                </tr>
+                                <tr>
+                                    <th>Web Root:</th>
+                                    <td><small>@Model.WebRoot</small></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-server mr-2"></i>System Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 40%">Machine Name:</th>
+                                    <td>@Model.MachineName</td>
+                                </tr>
+                                <tr>
+                                    <th>Operating System:</th>
+                                    <td>@Model.OSVersion</td>
+                                </tr>
+                                <tr>
+                                    <th>Processor Count:</th>
+                                    <td>@Model.ProcessorCount cores</td>
+                                </tr>
+                                <tr>
+                                    <th>Architecture:</th>
+                                    <td>@(Model.Is64BitOS ? "64-bit" : "32-bit")</td>
+                                </tr>
+                                <tr>
+                                    <th>.NET Runtime:</th>
+                                    <td>@Model.RuntimeVersion</td>
+                                </tr>
+                                <tr>
+                                    <th>Process ID:</th>
+                                    <td>@Model.ProcessId</td>
+                                </tr>
+                                <tr>
+                                    <th>Thread Count:</th>
+                                    <td>@Model.ThreadCount</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Memory & Docker Info -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-memory mr-2"></i>Memory Usage</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-box bg-gradient-info">
+                                    <span class="info-box-icon"><i class="fas fa-database"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Working Set</span>
+                                        <span class="info-box-number">@Model.WorkingSetMB MB</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box bg-gradient-warning">
+                                    <span class="info-box-icon"><i class="fas fa-chart-pie"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Private Memory</span>
+                                        <span class="info-box-number">@Model.PrivateMemoryMB MB</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="callout callout-info">
+                            <h5><i class="fas fa-info-circle"></i> Note:</h5>
+                            Memory usage is monitored in real-time. For Docker deployments, these values reflect
+                            container-level metrics.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fab fa-docker mr-2"></i>Docker Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 40%">Running in Docker:</th>
+                                    <td>
+                                        @if (Model.IsRunningInDocker)
+                                        {
+                                            <span class="badge badge-success"><i class="fas fa-check"></i> Yes</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-secondary"><i class="fas fa-times"></i> No</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Container Hostname:</th>
+                                    <td>@Model.DockerHostname</td>
+                                </tr>
+                                <tr>
+                                    <th>Deployment Type:</th>
+                                    <td>
+                                        @if (Model.IsRunningInDocker)
+                                        {
+                                            <span class="badge badge-primary">Containerized</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-secondary">Native</span>
+                                        }
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        @if (Model.IsRunningInDocker)
+                        {
+                            <div class="callout callout-success">
+                                <h5><i class="fab fa-docker"></i> Docker Deployment Active!</h5>
+                                <p>This application is running inside a Docker container. All changes will persist based on
+                                    your volume configuration.</p>
+                                <p class="mb-0"><strong>CI/CD Status:</strong> Ready for automated deployments via GitHub
+                                    Actions.</p>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="callout callout-info">
+                                <h5><i class="fas fa-info-circle"></i> Native Deployment</h5>
+                                <p class="mb-0">Application is running directly on the host system without containerization.
+                                </p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Statistics -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-database mr-2"></i>Database Statistics</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-3 col-6">
+                                <div class="info-box bg-gradient-info">
+                                    <span class="info-box-icon"><i class="fas fa-plug"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Total Connections</span>
+                                        <span class="info-box-number">@Model.TotalConnections</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-6">
+                                <div class="info-box bg-gradient-success">
+                                    <span class="info-box-icon"><i class="fas fa-check-circle"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Active Connections</span>
+                                        <span class="info-box-number">@Model.ActiveConnections</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-6">
+                                <div class="info-box bg-gradient-warning">
+                                    <span class="info-box-icon"><i class="fas fa-tasks"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Migration Jobs</span>
+                                        <span class="info-box-number">@Model.TotalJobs</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-6">
+                                <div class="info-box bg-gradient-primary">
+                                    <span class="info-box-icon"><i class="fas fa-building"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Tenants</span>
+                                        <span class="info-box-number">@Model.TotalTenants</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="callout callout-warning">
+                            <h5><i class="fas fa-exclamation-triangle"></i> Development Mode</h5>
+                            <p class="mb-0">Currently using <strong>InMemory Database</strong>. Data will be lost on
+                                application restart. For production, configure SQL Server or PostgreSQL.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="/" class="btn btn-primary">
+                            <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                        </a>
+                        <a href="/health/detailed" class="btn btn-info ml-2" target="_blank">
+                            <i class="fas fa-heartbeat mr-2"></i>Health Check JSON
+                        </a>
+                        <button class="btn btn-success ml-2" onclick="location.reload()">
+                            <i class="fas fa-sync-alt mr-2"></i>Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

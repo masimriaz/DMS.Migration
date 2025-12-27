@@ -1,0 +1,398 @@
+@{
+    ViewData["Title"] = "SharePoint Migration Tool";
+    ViewData["HideNavigation"] = true;
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Enterprise Migration Platform</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/css/site-custom.css" asp-append-version="true" />
+</head>
+
+<body class="landing-page">
+    <!-- Top Navigation -->
+    <nav class="landing-navbar navbar navbar-expand-lg sticky-top">
+        <div class="container px-4">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <div class="brand-icon-wrapper">
+                    <i class="bi bi-arrow-left-right-circle-fill"></i>
+                </div>
+                <span class="brand-text">SharePoint Migration Tool</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto me-4">
+                    <li class="nav-item"><a class="nav-link-landing" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link-landing" href="#how-it-works">How It Works</a></li>
+                    <li class="nav-item"><a class="nav-link-landing" href="#security">Security</a></li>
+                    <li class="nav-item"><a class="nav-link-landing" href="#pricing">Pricing</a></li>
+                </ul>
+                <div class="d-flex gap-2 align-items-center">
+                    <a href="#documentation" class="btn-link-landing">Docs</a>
+                    <a href="@Url.Action("Login", "Account")" class="btn btn-landing-primary">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background"></div>
+        <div class="container position-relative">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-badge mb-3">
+                        <i class="bi bi-award-fill me-2"></i>Trusted by 850+ Enterprises Worldwide
+                    </div>
+                    <h1 class="hero-title">Migrate SharePoint with confidence</h1>
+                    <p class="hero-subtitle">
+                        Enterprise-grade migration platform that delivers zero data loss, complete security, and
+                        unprecedented speed. From planning to validation — we've got you covered.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="@Url.Action("Login", "Account")" class="btn btn-hero-primary btn-lg">
+                            <i class="bi bi-rocket-takeoff me-2"></i>Start Free Trial
+                        </a>
+                        <a href="#features" class="btn btn-hero-secondary btn-lg">
+                            <i class="bi bi-play-circle me-2"></i>Watch Demo
+                        </a>
+                    </div>
+                    <div class="hero-stats mt-4">
+                        <div class="row g-4">
+                            <div class="col-4">
+                                <div class="stat-number">5.2B+</div>
+                                <div class="stat-label">Items Migrated</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-number">99.97%</div>
+                                <div class="stat-label">Success Rate</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-number">850+</div>
+                                <div class="stat-label">Enterprise Clients</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-visual">
+                        <div class="dashboard-mock">
+                            <div class="dashboard-header">
+                                <div class="dashboard-tabs">
+                                    <div class="tab active">Dashboard</div>
+                                    <div class="tab">Connections</div>
+                                    <div class="tab">Migration Jobs</div>
+                                </div>
+                            </div>
+                            <div class="dashboard-body">
+                                <div class="mock-chart"></div>
+                                <div class="mock-table">
+                                    <div class="mock-row"></div>
+                                    <div class="mock-row"></div>
+                                    <div class="mock-row"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Value Proposition -->
+    <section id="features" class="value-section">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">Enterprise migration capabilities</h2>
+                <p class="section-description">Everything you need to migrate SharePoint at scale with zero data loss
+                </p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="value-card">
+                        <div class="value-icon bg-primary-subtle">
+                            <i class="bi bi-search text-primary"></i>
+                        </div>
+                        <h3 class="value-title">Discover & Assess</h3>
+                        <p class="value-description">
+                            Inventory sites, libraries, workflows, permissions, and dependencies across your entire
+                            SharePoint estate.
+                        </p>
+                        <ul class="value-features">
+                            <li>Automated site scanning</li>
+                            <li>Dependency mapping</li>
+                            <li>Size & complexity reports</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="value-card">
+                        <div class="value-icon bg-success-subtle">
+                            <i class="bi bi-diagram-3 text-success"></i>
+                        </div>
+                        <h3 class="value-title">Plan with Precision</h3>
+                        <p class="value-description">
+                            Configure mappings, transformations, and rules with Excel-driven metadata and visual
+                            planning tools.
+                        </p>
+                        <ul class="value-features">
+                            <li>Source → Target mapping</li>
+                            <li>Content type transformation</li>
+                            <li>User & group resolution</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="value-card">
+                        <div class="value-icon bg-warning-subtle">
+                            <i class="bi bi-lightning-charge text-warning"></i>
+                        </div>
+                        <h3 class="value-title">Migrate at Scale</h3>
+                        <p class="value-description">
+                            Execute migrations with high-throughput modes, resumable jobs, and intelligent throttling
+                            management.
+                        </p>
+                        <ul class="value-features">
+                            <li>Multi-threaded execution</li>
+                            <li>Incremental (delta) sync</li>
+                            <li>Automatic retry logic</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="value-card">
+                        <div class="value-icon bg-info-subtle">
+                            <i class="bi bi-check-circle text-info"></i>
+                        </div>
+                        <h3 class="value-title">Validate & Report</h3>
+                        <p class="value-description">
+                            Verify permissions, validate links, audit metadata, and generate comprehensive
+                            post-migration reports.
+                        </p>
+                        <ul class="value-features">
+                            <li>Pre/post migration checks</li>
+                            <li>Broken link detection</li>
+                            <li>Compliance reports</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-section bg-light">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">How it works</h2>
+                <p class="section-description">Five steps to successful SharePoint migration</p>
+            </div>
+            <div class="steps-container">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <h4 class="step-title">Connect Source & Target</h4>
+                    <p class="step-description">Configure connection profiles for SharePoint On-Prem, Online, OneDrive,
+                        or file shares</p>
+                </div>
+                <div class="step-arrow"><i class="bi bi-arrow-right"></i></div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <h4 class="step-title">Run Discovery</h4>
+                    <p class="step-description">Scan and inventory your SharePoint environment with detailed analytics
+                    </p>
+                </div>
+                <div class="step-arrow"><i class="bi bi-arrow-right"></i></div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <h4 class="step-title">Configure Migration Plan</h4>
+                    <p class="step-description">Map sources to targets, set transformation rules, and validate your
+                        strategy</p>
+                </div>
+                <div class="step-arrow"><i class="bi bi-arrow-right"></i></div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <h4 class="step-title">Execute Migration</h4>
+                    <p class="step-description">Run jobs with real-time progress tracking and automatic error recovery
+                    </p>
+                </div>
+                <div class="step-arrow"><i class="bi bi-arrow-right"></i></div>
+                <div class="step-item">
+                    <div class="step-number">5</div>
+                    <h4 class="step-title">Validate & Report</h4>
+                    <p class="step-description">Verify data integrity, permissions, and generate compliance
+                        documentation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Highlights -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">Enterprise-grade features</h2>
+                <p class="section-description">Built for IT administrators and migration engineers</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-item">
+                        <i class="bi bi-diagram-2 feature-icon"></i>
+                        <h4 class="feature-title">Multi-Version Support</h4>
+                        <p class="feature-text">SharePoint 2003 → 2019 → Online. Migrate between any versions
+                            seamlessly.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-item">
+                        <i class="bi bi-shield-lock feature-icon"></i>
+                        <h4 class="feature-title">Permissions Preservation</h4>
+                        <p class="feature-text">Maintain security inheritance, custom permissions, and group
+                            memberships.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-item">
+                        <i class="bi bi-file-earmark-code feature-icon"></i>
+                        <h4 class="feature-title">Workflow & Metadata</h4>
+                        <p class="feature-text">Support for custom workflows, managed metadata, and content types.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-item">
+                        <i class="bi bi-arrow-repeat feature-icon"></i>
+                        <h4 class="feature-title">Incremental Migrations</h4>
+                        <p class="feature-text">Delta sync capabilities for ongoing migrations without downtime.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-item">
+                        <i class="bi bi-code-slash feature-icon"></i>
+                        <h4 class="feature-title">Automation & Scripting</h4>
+                        <p class="feature-text">PowerShell integration and REST API for automated workflows.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-item">
+                        <i class="bi bi-building feature-icon"></i>
+                        <h4 class="feature-title">Multi-Tenant Architecture</h4>
+                        <p class="feature-text">Isolated environments with RBAC for MSPs and large enterprises.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security & Trust -->
+    <section id="security" class="security-section bg-light">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">Security & Compliance</h2>
+                <p class="section-description">Enterprise-grade security built for on-premises and hybrid environments
+                </p>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6">
+                    <div class="security-item">
+                        <i class="bi bi-hdd-network security-icon"></i>
+                        <h4 class="security-title">On-Prem Friendly</h4>
+                        <p class="security-text">Runs entirely within your network. No cloud dependencies required.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="security-item">
+                        <i class="bi bi-key security-icon"></i>
+                        <h4 class="security-title">Encrypted Credentials</h4>
+                        <p class="security-text">AES-256 encryption for all secrets using Windows Data Protection API.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="security-item">
+                        <i class="bi bi-person-badge security-icon"></i>
+                        <h4 class="security-title">Role-Based Access</h4>
+                        <p class="security-text">Granular RBAC with admin, operator, and viewer roles.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="security-item">
+                        <i class="bi bi-journal-text security-icon"></i>
+                        <h4 class="security-title">Full Audit Trails</h4>
+                        <p class="security-text">Complete activity logging for compliance and troubleshooting.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="security-item">
+                        <i class="bi bi-shield-check security-icon"></i>
+                        <h4 class="security-title">Data Privacy</h4>
+                        <p class="security-text">No data leaves your environment. Zero telemetry to external services.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta-section">
+        <div class="container text-center">
+            <h2 class="cta-title">Ready to migrate without risk?</h2>
+            <p class="cta-subtitle">Join hundreds of enterprises who trust our platform for SharePoint migrations</p>
+            <div class="cta-actions">
+                <a href="@Url.Action("Login", "Account")" class="btn btn-primary btn-lg me-3">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                </a>
+                <a href="@Url.Action("Login", "Account")" class="btn btn-outline-primary btn-lg">
+                    Start Your First Migration
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 class="footer-title">SharePoint Migration Tool</h5>
+                    <p class="text-muted">Enterprise-grade migration platform for SharePoint environments.</p>
+                    <p class="text-muted small mb-0">Version 2.0.0</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="footer-title">Resources</h5>
+                    <ul class="footer-links">
+                        <li><a href="#documentation">Documentation</a></li>
+                        <li><a href="#api">API Reference</a></li>
+                        <li><a href="#guides">Migration Guides</a></li>
+                        <li><a href="#support">Support Portal</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="footer-title">Contact</h5>
+                    <ul class="footer-links">
+                        <li><i class="bi bi-envelope me-2"></i>support@yourdomain.com</li>
+                        <li><i class="bi bi-telephone me-2"></i>+1 (555) 123-4567</li>
+                        <li><i class="bi bi-geo-alt me-2"></i>Enterprise Support Available</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center text-muted">
+                <p class="mb-0">&copy; 2025 SharePoint Migration Tool. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

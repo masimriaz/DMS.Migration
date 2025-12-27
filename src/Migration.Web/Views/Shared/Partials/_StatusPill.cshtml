@@ -1,0 +1,31 @@
+@model string
+
+@{
+    var statusClass = Model?.ToLower() switch
+    {
+        "pending" => "status-pending",
+        "queued" => "status-queued",
+        "running" => "status-running",
+        "completed" => "status-completed",
+        "failed" => "status-failed",
+        "cancelled" => "status-cancelled",
+        "paused" => "status-paused",
+        _ => "status-pending"
+    };
+
+    var iconClass = Model?.ToLower() switch
+    {
+        "pending" => "bi-clock",
+        "queued" => "bi-hourglass-split",
+        "running" => "bi-arrow-repeat",
+        "completed" => "bi-check-circle",
+        "failed" => "bi-x-circle",
+        "cancelled" => "bi-dash-circle",
+        "paused" => "bi-pause-circle",
+        _ => "bi-clock"
+    };
+}
+
+<span class="status-pill @statusClass">
+    <i class="bi @iconClass"></i> @Model
+</span>

@@ -1,0 +1,28 @@
+@model dynamic
+
+@{
+    var currentStep = Model?.CurrentStep ?? 1;
+    var steps = Model?.Steps ?? new List<string> { "Discovery", "Plan", "Migrate", "Validate" };
+}
+
+<div class="stepper">
+    @for (int i = 0; i < steps.Count; i++)
+    {
+        var stepNumber = i + 1;
+        var stepClass = stepNumber < currentStep ? "completed" : (stepNumber == currentStep ? "active" : "");
+
+        <div class="step @stepClass">
+            <div class="step-circle">
+                @if (stepNumber < currentStep)
+                {
+                    <i class="bi bi-check"></i>
+                }
+                else
+                {
+                    @stepNumber
+                }
+            </div>
+            <div class="step-label">@steps[i]</div>
+        </div>
+    }
+</div>

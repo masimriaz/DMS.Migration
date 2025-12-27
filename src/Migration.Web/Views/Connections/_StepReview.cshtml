@@ -1,0 +1,79 @@
+@model DMS.Migration.Web.Models.ConnectionViewModel
+
+<div class="card card-secondary">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-clipboard-list mr-2"></i>Review & Save</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="info-box bg-light">
+                    <span class="info-box-icon bg-primary"><i class="fas fa-tag"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Connection Name</span>
+                        <span class="info-box-number" id="reviewName">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <div class="info-box bg-light">
+                    <span class="info-box-icon bg-info"><i class="fas fa-exchange-alt"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Role</span>
+                        <span class="info-box-number" id="reviewRole">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <div class="info-box bg-light">
+                    <span class="info-box-icon bg-success"><i class="fas fa-server"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Type</span>
+                        <span class="info-box-number" id="reviewType">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <div class="callout callout-secondary">
+                    <h5><i class="fas fa-globe mr-2"></i>Endpoint</h5>
+                    <p class="mb-0" id="reviewEndpoint">-</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="callout callout-warning">
+                    <h5><i class="fas fa-lock mr-2"></i>Authentication</h5>
+                    <p class="mb-0" id="reviewAuth">-</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="callout callout-danger">
+                    <h5><i class="fas fa-tachometer-alt mr-2"></i>Throttling</h5>
+                    <p class="mb-0" id="reviewThrottling">-</p>
+                </div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <div class="callout callout-dark">
+                    <h5><i class="fas fa-cogs mr-2"></i>Preservation Options</h5>
+                    <p class="mb-0" id="reviewOptions">-</p>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.LastVerificationDiagnostics))
+            {
+                <div class="col-md-12">
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-check"></i> Connection Verified!</h5>
+                        @Model.LastVerificationDiagnostics
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

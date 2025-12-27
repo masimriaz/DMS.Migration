@@ -1,0 +1,427 @@
+@using DMS.Migration.Domain.Enums
+@model DMS.Migration.Web.Models.ConnectionsIndexViewModel
+@{
+    ViewData["Title"] = "Connection Profiles";
+    ViewData["Subtitle"] = "Manage source and target connections for migration workflows";
+}
+
+<!-- Info boxes -->
+<div class="row">
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-plug"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Total Connections</span>
+                <span class="info-box-number">@Model.Connections.Count()</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-check-circle"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Verified</span>
+                <span class="info-box-number">@Model.Connections.Count(c => c.Status ==
+                                        ConnectionStatus.Verified)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-arrow-right"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Source</span>
+                <span class="info-box-number">@Model.Connections.Count(c => c.Role == ConnectionRole.Source)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-arrow-left"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Target</span>
+                <span class="info-box-number">@Model.Connections.Count(c => c.Role == ConnectionRole.Target)</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters Card -->
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-filter mr-1"></i>
+            Filter Connections
+        </h3>
+        <div class="card-tools">
+            <a href="@Url.Action("New")" class="btn btn-success btn-sm">
+                <i class="fas fa-plus mr-1"></i>New Connection
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Role</label>
+                    <select name="role" class="form-control form-control-sm" onchange="this.form.submit()">
+                        <option value="">All Roles</option>
+                        @if (Model.FilterRole == ConnectionRole.Source)
+                        {
+                            <option value="1" selected>Source</option>
+                        }
+                        else
+                        {
+                            <option value="1">Source</option>
+                        }
+                        @if (Model.FilterRole == ConnectionRole.Target)
+                        {
+                            <option value="2" selected>Target</option>
+                        }
+                        else
+                        {
+                            <option value="2">Target</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Connection Type</label>
+                    <select name="type" class="form-control form-control-sm" onchange="this.form.submit()">
+                        <option value="">All Types</option>
+                        <option value="1" selected="@(Model.FilterType == ConnectionType.SharePointOnPrem)">SharePoint
+                            On-Prem</option>
+                        <option value="2" selected="@(Model.FilterType == ConnectionType.SharePointOnline)">SharePoint
+                            Online</option>
+                        <option value="3" selected="@(Model.FilterType == ConnectionType.OneDriveForBusiness)">OneDrive
+                        </option>
+                        <option value="4" selected="@(Model.FilterType == ConnectionType.FileShare)">File Share</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Status</label>
+                    <select name="status" class="form-control form-control-sm" onchange="this.form.submit()">
+                        <option value="">All Statuses</option>
+                        <option value="0" selected="@(Model.FilterStatus == ConnectionStatus.Draft)">Draft</option>
+                        <option value="1" selected="@(Model.FilterStatus == ConnectionStatus.Verified)">Verified
+                        </option>
+                        <option value="2" selected="@(Model.FilterStatus == ConnectionStatus.Failed)">Failed</option>
+                        <option value="3" selected="@(Model.FilterStatus == ConnectionStatus.Disabled)">Disabled
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Search</label>
+                    <div class="input-group input-group-sm">
+                        <input type="text" name="search" class="form-control" placeholder="Search connections..."
+                            value="@Model.SearchTerm">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (!Model.Connections.Any())
+{
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <i class="fas fa-plug text-muted" style="font-size: 5rem; opacity: 0.3;"></i>
+            <h3 class="mt-4">No Connections Found</h3>
+            <p class="text-muted mb-4">Get started by creating your first connection profile to begin migration</p>
+            <a href="@Url.Action("New")" class="btn btn-success btn-lg">
+                <i class="fas fa-plus-circle mr-2"></i>Create First Connection
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-list mr-1"></i>
+                Connection Profiles (@Model.Connections.Count())
+            </h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width: 10px">#</th>
+                            <th>Connection Name</th>
+                            <th>Role</th>
+                            <th>Type</th>
+                            <th>Endpoint</th>
+                            <th>Status</th>
+                            <th>Last Verified</th>
+                            <th style="width: 180px">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int index = 1;
+                        }
+                        @foreach (var conn in Model.Connections)
+                        {
+                            <tr>
+                                <td>@index.</td>
+                                <td>
+                                    <strong>@conn.Name</strong>
+                                    @if (!string.IsNullOrWhiteSpace(conn.Description))
+                                    {
+                                        <br>
+
+                                        <small class="text-muted">@conn.Description</small>
+                                    }
+                                </td>
+                                <td>
+                                    @if (conn.Role == ConnectionRole.Source)
+                                    {
+                                        <span class="badge badge-info">
+                                            <i class="fas fa-arrow-right mr-1"></i>Source
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-warning">
+                                            <i class="fas fa-arrow-left mr-1"></i>Target
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @switch (conn.Type)
+                                    {
+                                        case ConnectionType.SharePointOnPrem:
+                                            <i class="fas fa-building text-primary mr-1"></i>
+                                            <span>SP On-Prem</span>
+                                            break;
+                                        case ConnectionType.SharePointOnline:
+                                            <i class="fas fa-cloud text-info mr-1"></i>
+                                            <span>SPO</span>
+                                            break;
+                                        case ConnectionType.OneDriveForBusiness:
+                                            <i class="fas fa-cloud-upload-alt text-success mr-1"></i>
+                                            <span>OneDrive</span>
+                                            break;
+                                        case ConnectionType.FileShare:
+                                            <i class="fas fa-folder text-warning mr-1"></i>
+                                            <span>File Share</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    <span class="text-truncate d-inline-block" style="max-width: 300px;"
+                                        title="@conn.EndpointUrl">
+                                        <small>@conn.EndpointUrl</small>
+                                    </span>
+                                </td>
+                                <td>
+                                    @switch (conn.Status)
+                                    {
+                                        case ConnectionStatus.Draft:
+                                            <span class="badge badge-secondary">Draft</span>
+                                            break;
+                                        case ConnectionStatus.Verified:
+                                            <span class="badge badge-success">
+                                                <i class="fas fa-check-circle mr-1"></i>Verified
+                                            </span>
+                                            break;
+                                        case ConnectionStatus.Failed:
+                                            <span class="badge badge-danger">
+                                                <i class="fas fa-times-circle mr-1"></i>Failed
+                                            </span>
+                                            break;
+                                        case ConnectionStatus.Disabled:
+                                            <span class="badge badge-dark">Disabled</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    @if (conn.LastVerifiedAt.HasValue)
+                                    {
+                                        <small class="text-muted">
+                                            <i class="far fa-clock mr-1"></i>@conn.LastVerifiedAt.Value.ToString("MM/dd/yyyy HH:mm")
+                                        </small>
+                                    }
+                                    else
+                                    {
+                                        <small class="text-muted">Never</small>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="@Url.Action("Edit", new { id = conn.Id })" class="btn btn-sm btn-primary"
+                                            title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-success"
+                                            onclick="verifyConnection(@conn.Id)" title="Test Connection">
+                                            <i class="fas fa-check-circle"></i>
+                                        </button>
+                                        <button type="button"
+                                            class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split"
+                                            data-toggle="dropdown">
+                                            <span class="sr-only">More</span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="#"
+                                                onclick="duplicateConnection(@conn.Id, '@conn.Name'); return false;">
+                                                <i class="fas fa-copy mr-2"></i>Duplicate
+                                            </a>
+                                            @if (conn.Status == ConnectionStatus.Disabled)
+                                            {
+                                                <a class="dropdown-item" href="#"
+                                                    onclick="toggleConnection(@conn.Id, true); return false;">
+                                                    <i class="fas fa-play-circle mr-2 text-success"></i>Enable
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="dropdown-item" href="#"
+                                                    onclick="toggleConnection(@conn.Id, false); return false;">
+                                                    <i class="fas fa-pause-circle mr-2 text-warning"></i>Disable
+                                                </a>
+                                            }
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-danger" href="#"
+                                                onclick="deleteConnection(@conn.Id, '@conn.Name'); return false;">
+                                                <i class="fas fa-trash mr-2"></i>Delete
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer clearfix">
+            <div class="float-right">
+                <span class="text-muted">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Showing @Model.Connections.Count() connection@(Model.Connections.Count() != 1 ? "s" : "")
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <!-- Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize Bootstrap dropdowns
+            $('.dropdown-toggle').dropdown();
+        });
+
+        // Configure Toastr
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000"
+        };
+
+        async function verifyConnection(id) {
+            try {
+                const btn = event.target.closest('button');
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+
+                const response = await fetch(`/Connections/Verify?id=${id}`, { method: 'POST' });
+                const result = await response.json();
+
+                if (result.success) {
+                    toastr.success('Connection verified successfully', 'Success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    toastr.error(result.message || 'Verification failed', 'Error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-check-circle"></i>';
+                }
+            } catch (error) {
+                toastr.error('An error occurred', 'Error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle"></i>';
+            }
+        }
+
+        async function deleteConnection(id, name) {
+            if (!confirm(`Are you sure you want to delete connection "${name}"?\n\nThis action cannot be undone.`)) return;
+
+            try {
+                const response = await fetch(`/Connections/Delete?id=${id}`, { method: 'POST' });
+                const result = await response.json();
+
+                if (result.success) {
+                    toastr.success('Connection deleted successfully', 'Deleted');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    toastr.error('Failed to delete connection', 'Error');
+                }
+            } catch (error) {
+                toastr.error('An error occurred', 'Error');
+            }
+        }
+
+        async function toggleConnection(id, enable) {
+            try {
+                const response = await fetch(`/Connections/Toggle?id=${id}&enable=${enable}`, { method: 'POST' });
+                const result = await response.json();
+
+                if (result.success) {
+                    toastr.success(`Connection ${enable ? 'enabled' : 'disabled'} successfully`, 'Updated');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    toastr.error('Operation failed', 'Error');
+                }
+            } catch (error) {
+                toastr.error('An error occurred', 'Error');
+            }
+        }
+
+        async function duplicateConnection(id, name) {
+            const newName = prompt(`Enter name for duplicate of "${name}":`, `${name} (Copy)`);
+            if (!newName) return;
+
+            try {
+                const response = await fetch(`/Connections/Duplicate?id=${id}&newName=${encodeURIComponent(newName)}`, { method: 'POST' });
+                const result = await response.json();
+
+                if (result.success) {
+                    toastr.success('Connection duplicated successfully', 'Success');
+                    setTimeout(() => location.href = `/Connections/Edit/${result.connectionId}`, 1000);
+                } else {
+                    toastr.error('Failed to duplicate connection', 'Error');
+                }
+            } catch (error) {
+                toastr.error('An error occurred', 'Error');
+            }
+        }
+    </script>
+}
